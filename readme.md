@@ -1,8 +1,8 @@
 # Zombie-Shooter-Project
 
-The project implements several mini-games. The first and base game is a quest room with two quests. The first quest is an implementation of the mechanics of Tower Defense, the second quest represents the implementation of the mechanics of Flappy Bird.
+The project implements a simple zombie first person shooter. There are two game modes training and survival. The coaching mode provides easier gameplay, while the survival mode provides a more complex one. In addition, additional weapon options are available in survival mode.
 
-Additional information can be found in the Docs folder. It is presented in Ukrainian.
+Additional information can be found in the docx file. It is presented in Ukrainian.
 
 https://www.youtube.com/watch?v=exR7_DFXCEc&t=12s.
 
