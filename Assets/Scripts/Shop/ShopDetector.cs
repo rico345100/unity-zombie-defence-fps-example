@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ShopDetector : MonoBehaviour {
+	
+	int healUsed = 0;
 	public Transform shootPoint;
 	public float detectRange;
 	public Text shopText;
@@ -63,8 +65,17 @@ public class ShopDetector : MonoBehaviour {
 			case ShopType.UPGRADE_RECOIL:
 				weaponBase.upgradeRecoil++;
 				break;
+			case ShopType.UPGRADE_MAGAZINE:
+				weaponBase.upgradeMag++;
+				weaponBase.RecalculateMagSize();
+				break;
+			case ShopType.UPGRADE_MAX_AMMO:
+				weaponBase.upgradeMaxAmmo++;
+				weaponBase.RecalculateMaxAmmo();
+				break;
 		}
 	}
+
 
 	int GetAmmoPrice(Weapon weapon) {
 		int price = 0;
@@ -80,7 +91,10 @@ public class ShopDetector : MonoBehaviour {
 				price = 150;
 				break;
 			case Weapon.Glock:
-				price = 90;
+				price = 100;
+				break;
+			case Weapon.Python:
+				price = 100;
 				break;
 			default:
 				price = 100;
@@ -106,10 +120,14 @@ public class ShopDetector : MonoBehaviour {
 			case Weapon.Glock:
 				basePrice = 50;
 				break;
+			case Weapon.Python:
+				basePrice = 50;
+				break;
 		}
 
 		return basePrice * (upgraded + 1);
 	}
+
 
 	void Update() {
 		RaycastHit hit;
@@ -132,6 +150,10 @@ public class ShopDetector : MonoBehaviour {
 
 				if(shopType == ShopType.AMMO) {
 					shopPrice = GetAmmoPrice(weapon);
+					shopText.text = shopTitle + "\n(" + shopPrice + "$)\n\n" +  shopDesc + "\n\n";
+				}
+				else if(shopType == ShopType.HEAL) {
+					shopPrice = 100 + (75 * healUsed);
 					shopText.text = shopTitle + "\n(" + shopPrice + "$)\n\n" +  shopDesc + "\n\n";
 				}
 				else if(shopType == ShopType.UPGRADE_DAMAGE) {
@@ -170,6 +192,30 @@ public class ShopDetector : MonoBehaviour {
 						shopText.text = "Your weapon is fully upgraded.";
 					}
 				}
+				else if(shopType == ShopType.UPGRADE_MAGAZINE) {
+					int upgraded = weaponBase.upgradeMag;
+
+					if(upgraded < 10) {
+						shopPrice = GetUpgradePrice(weaponManager.currentWeapon, upgraded);
+						shopText.text = shopTitle + " Lv" + (upgraded + 1) + "\n(" + shopPrice + "$)\n\n" +  shopDesc + "\n\n";
+					}
+					else {
+						isPurchasable = false;
+						shopText.text = "Your weapon is fully upgraded.";
+					}
+				}
+				else if(shopType == ShopType.UPGRADE_MAX_AMMO) {
+					int upgraded = weaponBase.upgradeMaxAmmo;
+
+					if(upgraded < 10) {
+						shopPrice = GetUpgradePrice(weaponManager.currentWeapon, upgraded);
+						shopText.text = shopTitle + " Lv" + (upgraded + 1) + "\n(" + shopPrice + "$)\n\n" +  shopDesc + "\n\n";
+					}
+					else {
+						isPurchasable = false;
+						shopText.text = "Your weapon is fully upgraded.";
+					}
+				}
 				else {
 					shopText.text = shopTitle + "\n(" + shopPrice + "$)\n\n" +  shopDesc + "\n\n";
 				}
@@ -188,9 +234,40 @@ public class ShopDetector : MonoBehaviour {
 							weaponBase.bulletsLeft = weaponBase.startBullets + weaponBase.bulletsPerMag;
 							weaponBase.UpdateAmmoText();
 						}
+						else if(shopType == ShopType.HEAL) {
+							HealthManager healthManager = transform.parent.GetComponent<HealthManager>();
+
+							if(healthManager.Health >= healthManager.MaxHealth) {
+								wasPurchased = false;
+								PrintWarning("You have full health.");
+							}
+							else {
+								healthManager.Heal();
+								healUsed++;
+							}
+						}
+						else if(shopType == ShopType.WEAPON_PYTHON) {
+							Debug.Log("Try buy;");
+							if(!weaponManager.HasWeapon(Weapon.Python)) {
+								BuyWeapon(Weapon.Python);
+							}
+							else {
+								wasPurchased = false;
+								PrintWarning("You already have weapon.");
+							}
+						}
 						else if(shopType == ShopType.WEAPON_MP5K) {
 							if(!weaponManager.HasWeapon(Weapon.MP5K)) {
 								BuyWeapon(Weapon.MP5K);
+							}
+							else {
+								wasPurchased = false;
+								PrintWarning("You already have weapon.");
+							}
+						}
+						else if(shopType == ShopType.WEAPON_UMP45) {
+							if(!weaponManager.HasWeapon(Weapon.UMP45)) {
+								BuyWeapon(Weapon.UMP45);
 							}
 							else {
 								wasPurchased = false;
@@ -240,6 +317,24 @@ public class ShopDetector : MonoBehaviour {
 							}
 							else {
 								UpgradeWeapon(weaponBase, ShopType.UPGRADE_RECOIL);								
+							}
+						}
+						else if(shopType == ShopType.UPGRADE_MAGAZINE) {
+							if(weaponBase.upgradeMag >= 10) {
+								wasPurchased = false;
+								PrintWarning("Your weapon is fully upgraded.");
+							}
+							else {
+								UpgradeWeapon(weaponBase, ShopType.UPGRADE_MAGAZINE);
+							}
+						}
+						else if(shopType == ShopType.UPGRADE_MAX_AMMO) {
+							if(weaponBase.upgradeMaxAmmo >= 10) {
+								wasPurchased = false;
+								PrintWarning("Your weapon is fully upgraded.");
+							}
+							else {
+								UpgradeWeapon(weaponBase, ShopType.UPGRADE_MAX_AMMO);
 							}
 						}
 						else {

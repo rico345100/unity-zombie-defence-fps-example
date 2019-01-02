@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class HealthManager : MonoBehaviour {
 	Animator animator;
 
-	[SerializeField] private float health = 100.0f;
-
+	[SerializeField] public float Health = 100.0f;
+	public float MaxHealth = 100.0f;
 	public bool isPlayer = false;
 	public bool removeColliderOnDeath = false;
 	public HealthManager referer;	// Special prorperty for create multiple hit system, if it sets on GameObject that has same HealthManager, Apply Damage to it.
@@ -22,7 +22,7 @@ public class HealthManager : MonoBehaviour {
 
 	void Update() {
 		if(healthText) {
-			healthText.text = "HP: " + health.ToString();
+			healthText.text = "HP: " + Health.ToString();
 		}
 	}
 	
@@ -35,10 +35,10 @@ public class HealthManager : MonoBehaviour {
 			referer.ApplyDamage(damage);
 		}
 		else {
-			health -= damage;
+			Health -= damage;
 
-			if(health <= 0) {
-				health = 0;
+			if(Health <= 0) {
+				Health = 0;
 				
 				if(animator) {
 					animator.SetTrigger("Dead");
@@ -53,13 +53,13 @@ public class HealthManager : MonoBehaviour {
 	}
 
 	public void SetHealth(float newHealth) {
-		health = newHealth;
+		Health = newHealth;
 	}
 
 	public bool IsDead {
 		get {
 			if(!referer) {
-				return health <= 0;
+				return Health <= 0;
 			}
 			else {
 				return referer.IsDead;
@@ -72,4 +72,9 @@ public class HealthManager : MonoBehaviour {
 			collider.enabled = false;
 		}
 	}
+
+	public void Heal() {
+		Health = MaxHealth;
+	}
+
 }

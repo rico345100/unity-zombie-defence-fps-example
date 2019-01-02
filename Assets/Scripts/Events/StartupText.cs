@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class StartupText : MonoBehaviour {
+
+	public AudioMixerGroup output; 
+
 	Text text;
 	GlobalSoundManager globalSoundManager;
 	int remainSeconds;
@@ -14,6 +18,7 @@ public class StartupText : MonoBehaviour {
 
 	void Start() {
 		globalSoundManager = GlobalSoundManager.Get();
+		
 		globalSoundManager.Play(prepare);
 
 		text = GetComponent<Text>();

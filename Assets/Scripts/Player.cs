@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
 
@@ -8,7 +9,6 @@ public class Player : MonoBehaviour {
 	HealthManager healthManager;
 	bool isDestroyed = false;
 	public GameObject deadScreen;
-	
 
 	void Start() {
 		healthManager = GetComponent<HealthManager>();
@@ -33,7 +33,14 @@ public class Player : MonoBehaviour {
 					DisableController((FirstPersonController)script);
 				}
 			}
+
+			Invoke("GotoDieScene", 2.0f);
+
 		}
+	}
+
+	private void GotoDieScene(){
+		SceneManager.LoadScene(3);
 	}
 
 	void DisableWeapon(WeaponBase weapon) {

@@ -110,6 +110,17 @@ public class WeaponBase : MonoBehaviour {
 		}
 	}
 
+	public void RecalculateMagSize() {
+		float extraLoads = upgradeMag * upgradeMagFactor;
+		bulletsPerMag = bulletsPerMag + (int) extraLoads;
+	}
+
+	public void RecalculateMaxAmmo() {
+		float extraAmmo = upgradeMaxAmmo * upgradeMaxAmmoFactor;
+		startBullets = startBullets + (int) extraAmmo;
+	}
+
+
 	void Start() {
 		animator = GetComponent<Animator>();
 		weaponBob = GetComponent<WeaponBob>();

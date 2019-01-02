@@ -5,9 +5,11 @@ using UnityEngine.UI;
 
 public enum Weapon {
 	None,
+	Python,
 	Glock,
 	AKM,
 	MP5K,
+	UMP45,
 	M870
 };
 

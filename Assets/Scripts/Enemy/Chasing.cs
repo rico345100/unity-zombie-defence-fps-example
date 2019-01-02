@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class Chasing : MonoBehaviour {
-	NetworkManager networkManager;
-	Animator animator;
-	HealthManager healthManager;
-	NavMeshAgent agent;
-	AudioSource audioSource;
+	
+	public GameManager networkManager;
+	public Animator animator;
+	public HealthManager healthManager;
+	public NavMeshAgent agent;
+	public AudioSource audioSource;
 	public GameObject target;
 	public float damage = 15.0f;
 	public bool isAttacking = false;
@@ -26,7 +27,7 @@ public class Chasing : MonoBehaviour {
 		agent = GetComponent<NavMeshAgent>();
 		audioSource = GetComponent<AudioSource>();
 
-		networkManager = GameObject.Find("GameManager").GetComponent<NetworkManager>();
+		networkManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 	}
 
 	IEnumerator distUpdateCo = null;
@@ -155,7 +156,6 @@ public class Chasing : MonoBehaviour {
 
 	IEnumerator RemoveGameObject() {
 		yield return new WaitForSeconds(5f);
-		// PhotonNetwork.Destroy(gameObject);
 		Destroy(gameObject);
 	}
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class FundSystem : MonoBehaviour {
-	private int fund = 0;
+	public int fund = 0;
 
 	public Text fundText;
 

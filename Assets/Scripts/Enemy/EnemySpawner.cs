@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemySpawner : MonoBehaviour {
+	
 	[Header("Enemy Spawn Management")]
 	public float respawnDuration = 5.0f;
 	public List<GameObject> spawnPoints = new List<GameObject>();
@@ -14,7 +15,10 @@ public class EnemySpawner : MonoBehaviour {
 	public float startMoveSpeed = 1f;
 	public float startDamage = 15f;
 	public int startEXP = 3;
+	public int growthEXP = 3;
 	public int startFund = 5;
+	public int growthFund = 5;
+
 	public float upgradeDuration = 60f;	// Increase all enemy stats every 30 seconds
 
 	private float upgradeTimer;
@@ -29,7 +33,7 @@ public class EnemySpawner : MonoBehaviour {
 	[SerializeField]
 	private int currentFund;
 
-	private NetworkManager networkManager;
+	private GameManager gameManager = null;
 	
 	
 	private float spawnTimer;
@@ -47,7 +51,7 @@ public class EnemySpawner : MonoBehaviour {
 		prefabManager = PrefabManager.GetInstance();
 		enemies.Add(prefabManager.GetPrefab("Zombie"));
 
-		networkManager = GameObject.Find("GameManager").GetComponent<NetworkManager>();
+		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 	}
 
 	void Update() {
@@ -123,8 +127,8 @@ public class EnemySpawner : MonoBehaviour {
 			currentDamage += 2f;
 		}
 		
-		currentEXP++;
-		currentFund++;
+		currentEXP += growthEXP;
+		currentFund += growthFund;
 
 		upgradeTimer = 0;
 	}
