@@ -12,6 +12,7 @@ https://www.youtube.com/watch?v=exR7_DFXCEc&t=12s.
 - Alt or RMB - Take aim
 - E - Select action
 - R - Reload action
+
 and more
 
 ## Prerequisites
